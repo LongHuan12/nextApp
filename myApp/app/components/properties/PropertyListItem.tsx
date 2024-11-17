@@ -14,7 +14,7 @@ const PropertyListItem: React.FC<PropertyProps> = ({
                 <Image
                     fill
                     src={property.image_url}
-                    sizes="(max-width: 568px) 568px, (max-width: 1000px): 568px, 568px"
+                    sizes="(max-width: 768px) 768px, (max-width: 1200px): 768px, 768px"
                     className="hover:scale-110 object-cover transition h-full w-full"
                     alt="Beach house"
                 />
@@ -23,7 +23,7 @@ const PropertyListItem: React.FC<PropertyProps> = ({
                 <p className="text-lg font-bold">{property.title}</p>
             </div>
             <div className="mt-2">
-                <p className="text-sm text-gray-500"><strong>{property.price_per_night}</strong></p>
+                <p className="text-sm text-gray-500"><strong>{property.price_per_night} 000</strong> VND</p>
             </div>
         </div>
     );
