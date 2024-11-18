@@ -10,6 +10,9 @@ import {handleLogin} from "@/app/lib/actions";
 
 
 const SignupModal = () => {
+    //
+    // Variables
+
     const router = useRouter();
     const signupModal = useSignupModal();
     const [email, setEmail] = useState('');
@@ -17,6 +20,8 @@ const SignupModal = () => {
     const [password2, setPassword2] = useState('');
     const [errors, setErrors] = useState<string[]>([]);
 
+    //
+    // Submit functionality
 
     const submitSignup = async () => {
         const formData = {
@@ -24,11 +29,11 @@ const SignupModal = () => {
             password1: password1,
             password2: password2
         }
-        const response = await apiService.post('/api/auth/register/', JSON.stringify(formData));
 
+        const response = await apiService.postWithoutToken('/api/auth/register/', JSON.stringify(formData));
 
         if (response.access) {
-            handleLogin(response.user.pk, response.access, response.refresh)
+            handleLogin(response.user.pk, response.access, response.refresh);
 
             signupModal.close();
 
@@ -41,7 +46,6 @@ const SignupModal = () => {
             setErrors(tmpErrors);
         }
     }
-
 
     const content = (
         <>

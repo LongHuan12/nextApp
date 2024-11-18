@@ -1,0 +1,12 @@
+{
+    "configurations": [
+
+        {
+            "name": "dev (1)",
+            "type": "npm",
+            "workingDir": "C:\\Users\\Administrator\\Desktop\\nextApp\\myApp",
+            "command": "run",
+            "scripts": "dev"
+        }
+    ]
+}
