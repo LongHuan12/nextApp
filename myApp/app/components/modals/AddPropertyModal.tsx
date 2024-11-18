@@ -83,7 +83,7 @@ const AddPropertyModal = () => {
                 addPropertyModal.close();
             } else {
                 console.log('ERROR');
-                const tmpErrors = string[] = Object.values(response).map((error: any) => {
+                const tmpErrors:string[] = Object.values(response).map((error: any) => {
                     return error;
                 });
                 setErrors(tmpErrors);
