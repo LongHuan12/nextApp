@@ -1,11 +1,11 @@
 'use client'
 
-import {useState, useEffect} from "react";
+import {useState, useEffect} from 'react';
 import {Range} from 'react-date-range';
-import {differenceInDays, eachDayOfInterval} from 'date-fns';
-import DatePicker from "@/app/components/forms/Calendar";
-import apiService from "@/app/services/apiService";
-import useLoginModal from "@/app/hooks/useLoginModal";
+import { differenceInDays, eachDayOfInterval, format} from 'date-fns';
+import DatePicker from '../forms/Calendar';
+import apiService from '@/app/services/apiService';
+import useLoginModal from '@/app/hooks/useLoginModal';
 
 const initialDateRange = {
     startDate: new Date(),
@@ -35,8 +35,34 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
     const [totalPrice, setTotalPrice] = useState<number>(0);
     const [dateRange, setDateRange] = useState<Range>(initialDateRange);
     const [minDate, setMinDate] = useState<Date>(new Date());
+    const [bookedDates, setBookedDates] = useState<Date[]>([]);
     const [guests, setGuests] = useState<string>('1');
     const guestsRange = Array.from ({ length: property.guests}, (_, index) => index + 1)
+
+    const performBooking = async () => {
+        console.log('performBooking', userId);
+
+        if (userId) {
+            if (dateRange.startDate && dateRange.endDate) {
+                const formData = new FormData();
+                formData.append('guests', guests);
+                formData.append('start_date', format(dateRange.startDate, 'yyyy-MM-dd'));
+                formData.append('end_date', format(dateRange.endDate, 'yyyy-MM-dd'));
+                formData.append('number_of_nights', nights.toString());
+                formData.append('total_price', totalPrice.toString());
+
+                const response = await apiService.post(`/api/properties/${property.id}/book/`, formData);
+
+                if (response.success) {
+                    console.log('Bookin successful')
+                } else {
+                    console.log('Something went wrong...');
+                }
+            }
+        } else {
+            LoginModal.open();
+        }
+    }
 
     const _setDateRange = (selection: any) => {
         const newStartDate = new Date(selection.startDate);
@@ -48,13 +74,29 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
 
         setDateRange({
             ...dateRange,
-            StartDate: newStartDate,
+            startDate: newStartDate,
             endDate: newEndDate
         })
+    }
 
+    const getReservations = async () => {
+        const reservations = await apiService.get(`/api/properties/${property.id}/reservations`);
+
+        let dates: Date[] = [];
+        reservations.forEach((reservations: any) => {
+            const range = eachDayOfInterval({
+                start: new Date(reservations.start_date),
+                end: new Date(reservations.end_date)
+            });
+
+            dates = [...dates, ...range];
+        })
+
+        setBookedDates(dates);
     }
 
     useEffect(() => {
+        getReservations();
         if (dateRange.startDate && dateRange.endDate) {
             const dayCount = differenceInDays(
                 dateRange.endDate,
@@ -82,6 +124,7 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
 
             <DatePicker
                 value={dateRange}
+                bookedDates={bookedDates}
                 onChange={(value) => setDateRange(value.selection)}
             />
 
@@ -100,7 +143,10 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
 
             </div>
 
-            <div className="w-full mb-6 py-6 text-center text-white bg-blue-500 hover:bg-blue-600 hover:shadow-md hover:scale-202 transition-all duration-400 ease-in-out rounded-xl">
+            <div
+                onClick={performBooking}
+                className="w-full mb-6 py-6 text-center text-white bg-blue-500 hover:bg-blue-600 hover:shadow-md hover:scale-202 transition-all duration-400 ease-in-out rounded-xl"
+            >
                 Book
             </div>
 
