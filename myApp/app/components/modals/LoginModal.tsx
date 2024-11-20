@@ -1,7 +1,8 @@
 'use client';
 
 import CustomButton from "../forms/CustomButton";
-import Modal from "./Modals";
+// import Modal from "./Modal";
+import Modal from "./Modals"
 import useLoginModal from "@/app/hooks/useLoginModal";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
