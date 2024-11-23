@@ -29,7 +29,8 @@ const LoginModal = () => {
 
             loginModal.close();
 
-            router.push('/')
+            router.push('http://localhost:3000/')
+            // window.location.reload()
         } else {
             setErrors(response.non_field_errors);
         }
