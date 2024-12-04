@@ -13,6 +13,7 @@ class PropertiesListSerializer(serializers.ModelSerializer):
             'title',
             'price_per_night',
             'image_url',
+            'category'
         )
 
 
@@ -31,7 +32,8 @@ class PropertiesDetailSerializer(serializers.ModelSerializer):
             'bathrooms',
             'guests',
             'landlord',
-            'country_code'
+            'country_code',
+            'category'
         )
 
 

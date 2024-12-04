@@ -128,7 +128,6 @@ def create_property(request):
         return JsonResponse({'error': 'You do not have permission to add a property.'}, status=403)
     form = PropertyForm(request.POST, request.FILES)
     
-    
     if form.is_valid():
         property = form.save(commit=False)
         property.landlord = request.user

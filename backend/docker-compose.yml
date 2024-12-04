@@ -13,7 +13,11 @@ services:
     depends_on:
       - db
   db:
+    ports:
+      - 5433:5432
     image: postgres:15
+
+
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
